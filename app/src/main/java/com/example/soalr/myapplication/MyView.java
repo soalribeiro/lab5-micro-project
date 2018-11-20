@@ -7,9 +7,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-
 import java.util.Vector;
-
 
 public class MyView extends View {
     Paint paint = null;
@@ -17,11 +15,11 @@ public class MyView extends View {
     int lados_poly;
     int cor;
     int deletar;
-    Circulo cir;
-    Circulo raio;
     int CursorX, CursorY;
     int nrCliques;
     Vector<Ponto2D> ptsCirc = new Vector<Ponto2D>();
+    Vector<Ponto2D> ptsReta = new Vector<Ponto2D>();
+    Vector<Reta> guardaRetas = new Vector<Reta>();
 
     public MyView(Context context) {
         super(context);
@@ -37,10 +35,10 @@ public class MyView extends View {
         figure = 0;
         cor = 0;
 
-        Ponto2D centroCirc = new Ponto2D();
-        centroCirc.x = CursorX;
-        centroCirc.y = CursorY;
-        cir = new Circulo(centroCirc);
+//        Ponto2D centroCirc = new Ponto2D();
+//        centroCirc.x = CursorX;
+//        centroCirc.y = CursorY;
+//        cir = new Circulo(centroCirc);
     }
 
     public MyView(Context context, AttributeSet attrs, int defStyle) {
@@ -48,7 +46,6 @@ public class MyView extends View {
         paint = new Paint();
         figure = 0;
         cor = 0;
-
     }
 
 
@@ -59,7 +56,6 @@ public class MyView extends View {
 
                 switch (event.getActionMasked()) {
                     case MotionEvent.ACTION_DOWN:
-                        nrCliques++;
 
                     case MotionEvent.ACTION_UP:
 
@@ -71,6 +67,14 @@ public class MyView extends View {
                             centroCirc.x = CursorX;
                             centroCirc.y = CursorY;
                             ptsCirc.add(centroCirc);
+                            invalidate();
+                        }
+
+                        if (figure == 2){
+                            Ponto2D ptReta = new Ponto2D();
+                            ptReta.x = CursorX;
+                            ptReta.y = CursorY;
+                            ptsReta.add(ptReta);
                             invalidate();
                         }
 
@@ -86,12 +90,6 @@ public class MyView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         clickEcra();
-
-        //uso da class Reta
-
-        Ponto2D p3 = new Ponto2D();
-        p3.x = 600;
-        p3.y = 150;
 
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.parseColor("#F5F1E0"));
@@ -111,7 +109,6 @@ public class MyView extends View {
 
 
         //figuras
-
         if (figure == 1) {
             if (ptsCirc.size() > 0) {
                 for (int a = 0; a < ptsCirc.size(); a++) {
@@ -120,27 +117,25 @@ public class MyView extends View {
                     canvas.drawCircle(ptsCirc.get(a).x, ptsCirc.get(a).y, raio.radius, paint);
                 }
             }
-        } else if (figure == 2) {
-            clickEcra();
-            Ponto2D p1 = new Ponto2D();
-            Ponto2D p2 = new Ponto2D();
+        }
 
-            Reta retinha = new Reta(p1, p2);
+        if (figure == 2) {
+            if (ptsReta.size() > 1) {
+                for (int b = 0; b < ptsReta.size(); b = b + 2) {
+                    Reta retinha = new Reta(ptsReta.get(b), ptsReta.get(b + 1));
+                    guardaRetas.add(retinha);
+                    System.out.println("pts: " + ptsReta.get(b) + ptsReta.get(b + 1));
+                }
 
-            if (nrCliques == 1) {
-                p1.x = CursorX;
-                p1.y = CursorY;
-                System.out.println("x1: " + p1.x + " y1: " + p1.y);
-            } else if (nrCliques == 2) {
-                p2.x = CursorX;
-                p2.y = CursorY;
-                System.out.println("x2: " + p2.x + " y2: " + p2.y);
+                if (guardaRetas.size() > 0) {
+                    for (int r = 0; r < guardaRetas.size(); r++) {
+                        canvas.drawLine(guardaRetas.get(r).pinicial.x, guardaRetas.get(r).pinicial.y, guardaRetas.get(r).pfinal.x, guardaRetas.get(r).pfinal.y, paint);
+                    }
+                }
             }
+        }
 
-            System.out.println("x2_: " + retinha.pfinal.x + " y2_: " + retinha.pfinal.y);
-            System.out.println("x1_: " + retinha.pinicial.x + " y1_: " + retinha.pinicial.y);
-            canvas.drawLine(retinha.pinicial.x, retinha.pinicial.y, retinha.pfinal.x, retinha.pfinal.y, paint);
-        } else if (figure == 3) {
+        if (figure == 3) {
             Poligono poly = new Poligono(lados_poly);
 
             if (lados_poly >= 3) {
@@ -172,6 +167,8 @@ public class MyView extends View {
             canvas.drawPaint(paint);
             nrCliques = 0;
             ptsCirc.removeAllElements();
+            ptsReta.removeAllElements();
+            guardaRetas.removeAllElements();
         }
     }
 

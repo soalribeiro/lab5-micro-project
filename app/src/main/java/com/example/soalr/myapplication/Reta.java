@@ -9,7 +9,7 @@ public class Reta {
         pfinal = new Ponto2D();
     }
 
-    public Reta(Ponto2D a, Ponto2D b){
+    public Reta(Ponto2D a, Ponto2D b) {
         pinicial = a;
         pfinal = b;
     }
