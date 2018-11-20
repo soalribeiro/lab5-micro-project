@@ -7,7 +7,8 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
+
+import java.util.Vector;
 
 
 public class MyView extends View {
@@ -17,16 +18,16 @@ public class MyView extends View {
     int cor;
     int deletar;
     Circulo cir;
+    Circulo raio;
     int CursorX, CursorY;
     int nrCliques;
+    Vector<Ponto2D> ptsCirc = new Vector<Ponto2D>();
 
     public MyView(Context context) {
         super(context);
         paint = new Paint();
         figure = 0;
         cor = 0;
-
-
     }
 
     public MyView(Context context, AttributeSet attrs) {
@@ -58,15 +59,22 @@ public class MyView extends View {
 
                 switch (event.getActionMasked()) {
                     case MotionEvent.ACTION_DOWN:
+                        nrCliques++;
 
                     case MotionEvent.ACTION_UP:
 
                         CursorX = (int)event.getX();
                         CursorY = (int)event.getY();
 
+                        if (figure == 1) {
+                            Ponto2D centroCirc = new Ponto2D();
+                            centroCirc.x = CursorX;
+                            centroCirc.y = CursorY;
+                            ptsCirc.add(centroCirc);
+                            invalidate();
+                        }
+
                     default:
-                        nrCliques++;
-                        System.out.println("clique: " + nrCliques);
                         return false;
                 }
             }
@@ -80,18 +88,10 @@ public class MyView extends View {
         clickEcra();
 
         //uso da class Reta
-        Ponto2D p1 = new Ponto2D();
-        p1.x = (int)(Math.random() * ((500 - 90) + 1) + 90);
-        p1.y = (int)(Math.random() * ((400 - 90) + 1) + 90);
-        Ponto2D p2 = new Ponto2D();
-        p2.x = (int)(Math.random() * ((500 - 90) + 1) + 90);
-        p2.y = (int)(Math.random() * ((400 - 90) + 1) + 90);
 
         Ponto2D p3 = new Ponto2D();
         p3.x = 600;
         p3.y = 150;
-
-        Reta retinha = new Reta(p1, p2);
 
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.parseColor("#F5F1E0"));
@@ -111,20 +111,34 @@ public class MyView extends View {
 
 
         //figuras
+
         if (figure == 1) {
-            Ponto2D centroCirc = new Ponto2D();
-            clickEcra();
-            centroCirc.x = CursorX;
-            centroCirc.y = CursorY;
-            Circulo raio = new Circulo(centroCirc);
-            raio.radius = 100;
-            if (nrCliques > 0) {
-                //for (int a = 0; a <= nrCliques; a++) {
-                    canvas.drawCircle(centroCirc.x, centroCirc.y, raio.radius, paint);
-                //} ver de manha
+            if (ptsCirc.size() > 0) {
+                for (int a = 0; a < ptsCirc.size(); a++) {
+                    Circulo raio = new Circulo(ptsCirc.get(a));
+                    raio.radius = 100;
+                    canvas.drawCircle(ptsCirc.get(a).x, ptsCirc.get(a).y, raio.radius, paint);
+                }
             }
-            invalidate();
         } else if (figure == 2) {
+            clickEcra();
+            Ponto2D p1 = new Ponto2D();
+            Ponto2D p2 = new Ponto2D();
+
+            Reta retinha = new Reta(p1, p2);
+
+            if (nrCliques == 1) {
+                p1.x = CursorX;
+                p1.y = CursorY;
+                System.out.println("x1: " + p1.x + " y1: " + p1.y);
+            } else if (nrCliques == 2) {
+                p2.x = CursorX;
+                p2.y = CursorY;
+                System.out.println("x2: " + p2.x + " y2: " + p2.y);
+            }
+
+            System.out.println("x2_: " + retinha.pfinal.x + " y2_: " + retinha.pfinal.y);
+            System.out.println("x1_: " + retinha.pinicial.x + " y1_: " + retinha.pinicial.y);
             canvas.drawLine(retinha.pinicial.x, retinha.pinicial.y, retinha.pfinal.x, retinha.pfinal.y, paint);
         } else if (figure == 3) {
             Poligono poly = new Poligono(lados_poly);
@@ -156,7 +170,8 @@ public class MyView extends View {
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(Color.parseColor("#F5F1E0"));
             canvas.drawPaint(paint);
-            nrCliques =0;
+            nrCliques = 0;
+            ptsCirc.removeAllElements();
         }
     }
 

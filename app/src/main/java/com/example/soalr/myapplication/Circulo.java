@@ -1,17 +1,12 @@
 package com.example.soalr.myapplication;
 
-import java.util.Vector;
-
 public class Circulo {
     int radius;
     Ponto2D centro;
-    Vector<Ponto2D> ptsCirc = new Vector<Ponto2D>();
 
     public Circulo(Ponto2D c) {
         radius = 0;
         centro = c;
-
-        ptsCirc.add(c);
     }
 
     public Double CalcPerCirc(){
