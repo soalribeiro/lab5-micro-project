@@ -1,21 +1,20 @@
 package com.example.soalr.myapplication;
 
 public class Ponto2D {
-    int x, y;
+    float x, y;
 
     public Ponto2D() {
         this.x = 0;
         this.y = 0;
     }
 
-    public Ponto2D(int a, int b) {
+    public Ponto2D(float a, float b) {
         x = a;
         y = b;
     }
 
-    public Double dist(Ponto2D P1) {
-        Double distPontos = Math.sqrt((this.x - P1.x)^2 + (this.y - P1.y)^2);
-        return distPontos;
+    public double dist(Ponto2D P1) {
+        return Math.sqrt((x - P1.x) * (x - P1.x) + (y - P1.y) * (y - P1.y));
     }
 
     public Double distCentro(){

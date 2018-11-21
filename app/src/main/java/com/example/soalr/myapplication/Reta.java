@@ -15,8 +15,8 @@ public class Reta {
     }
 
     public Ponto2D PontoMedio() {
-        int respostaX = (pinicial.x - pfinal.x)/2;
-        int respostaY = (pinicial.y - pfinal.y)/2;
+        float respostaX = (pinicial.x - pfinal.x)/2;
+        float respostaY = (pinicial.y - pfinal.y)/2;
 
         Ponto2D PtMedio = new Ponto2D(respostaX, respostaY);
 

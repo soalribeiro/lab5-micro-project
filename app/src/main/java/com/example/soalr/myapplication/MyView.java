@@ -12,20 +12,24 @@ import java.util.Vector;
 public class MyView extends View {
     Paint paint = null;
     int figure;
-    int lados_poly;
     int cor;
     int deletar;
-    int CursorX, CursorY;
-    int nrCliques;
-    Vector<Ponto2D> ptsCirc = new Vector<Ponto2D>();
-    Vector<Ponto2D> ptsReta = new Vector<Ponto2D>();
-    Vector<Reta> guardaRetas = new Vector<Reta>();
+    float CursorX, CursorY;
+    Vector<Ponto2D> ptsCirc;// = new Vector<Ponto2D>();
+    Vector<Ponto2D> ptsReta;// = new Vector<Ponto2D>();
+    Vector<Reta> guardaRetas;// = new Vector<Reta>();
+    Poligono ptsPoli;// = new Poligono();
 
     public MyView(Context context) {
         super(context);
         paint = new Paint();
         figure = 0;
         cor = 0;
+        ptsCirc = new Vector<Ponto2D>();
+        ptsReta = new Vector<Ponto2D>();
+         guardaRetas = new Vector<Reta>();
+         ptsPoli = new Poligono();
+
     }
 
     public MyView(Context context, AttributeSet attrs) {
@@ -34,6 +38,10 @@ public class MyView extends View {
         paint.setStrokeWidth(10);
         figure = 0;
         cor = 0;
+        ptsCirc = new Vector<Ponto2D>();
+        ptsReta = new Vector<Ponto2D>();
+        guardaRetas = new Vector<Reta>();
+        ptsPoli = new Poligono();
 
 //        Ponto2D centroCirc = new Ponto2D();
 //        centroCirc.x = CursorX;
@@ -46,21 +54,67 @@ public class MyView extends View {
         paint = new Paint();
         figure = 0;
         cor = 0;
+        ptsCirc = new Vector<Ponto2D>();
+        ptsReta = new Vector<Ponto2D>();
+        guardaRetas = new Vector<Reta>();
+        ptsPoli = new Poligono();
     }
 
+    //Evento do click
+    public boolean onTouchEvent (MotionEvent event)
+    {
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
 
-    public void clickEcra() {
+            case MotionEvent.ACTION_UP:
+
+                CursorX = event.getX();
+                CursorY = event.getY();
+
+                if (figure == 1) {
+                    Ponto2D centroCirc = new Ponto2D();
+                    centroCirc.x = CursorX;
+                    centroCirc.y = CursorY;
+                    ptsCirc.add(centroCirc);
+                    invalidate();
+                }
+
+                if (figure == 2) {
+                    Ponto2D ptReta = new Ponto2D();
+                    ptReta.x = CursorX;
+                    ptReta.y = CursorY;
+                    ptsReta.add(ptReta);
+                    if (ptsReta.size() %2 == 0) {
+                    invalidate();}
+                }
+
+                if (figure == 3) {
+                    Ponto2D ptPoli = new Ponto2D();
+                    ptPoli.x = CursorX;
+                    ptPoli.y = CursorY;
+                    ptsPoli.addpoint(ptPoli);
+                   // if (ptsPoli.pontosPolig.size() %2 == 0) {
+                    invalidate();//}
+                }
+
+            default:
+                return false;
+
+
+        }
+    }
+
+   /* public void clickEcra() {
         setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
                 switch (event.getActionMasked()) {
                     case MotionEvent.ACTION_DOWN:
 
                     case MotionEvent.ACTION_UP:
 
-                        CursorX = (int)event.getX();
-                        CursorY = (int)event.getY();
+                        CursorX = event.getX();
+                        CursorY = event.getY();
 
                         if (figure == 1) {
                             Ponto2D centroCirc = new Ponto2D();
@@ -75,6 +129,15 @@ public class MyView extends View {
                             ptReta.x = CursorX;
                             ptReta.y = CursorY;
                             ptsReta.add(ptReta);
+
+                            invalidate();
+                        }
+
+                        if (figure == 3){
+                            Ponto2D ptPoli = new Ponto2D();
+                            ptPoli.x = CursorX;
+                            ptPoli.y = CursorY;
+                            ptsPoli.add(ptPoli);
                             invalidate();
                         }
 
@@ -82,14 +145,14 @@ public class MyView extends View {
                         return false;
                 }
             }
-        });
-    }
+        });*/
+    //}
 
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        clickEcra();
+     //   clickEcra();
 
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.parseColor("#F5F1E0"));
@@ -108,7 +171,7 @@ public class MyView extends View {
         }
 
 
-        //figuras
+        //figura 1 --> Círculo
         if (figure == 1) {
             if (ptsCirc.size() > 0) {
                 for (int a = 0; a < ptsCirc.size(); a++) {
@@ -119,6 +182,7 @@ public class MyView extends View {
             }
         }
 
+        //figura 2 --> Reta
         if (figure == 2) {
             if (ptsReta.size() %2 == 0) {
                 for (int b = 0; b < ptsReta.size(); b = b + 2) {
@@ -134,44 +198,42 @@ public class MyView extends View {
             }
         }
 
+        //figura 3 --> Polígono
         if (figure == 3) {
-            Poligono poly = new Poligono(lados_poly);
+            if (ptsPoli.pontosPolig.size() > 0) {
+                    for (int p = 0; p < ptsPoli.pontosPolig.size(); p++) {
+                            if (p > 0) {
 
-            if (lados_poly >= 3) {
-                for (int i = 0; i <= lados_poly - 1; i++) {
-                    Ponto2D ponto4 = new Ponto2D(poly.pontosPolig.get(i).x, poly.pontosPolig.get(i).y);
-                    Ponto2D ponto5 = new Ponto2D();
+                                    if(p>=2){
+                                        canvas.drawLine(ptsPoli.pontosPolig.get(p).x, ptsPoli.pontosPolig.get(p).y, ptsPoli.pontosPolig.get(p - 1).x, ptsPoli.pontosPolig.get(p - 1).y, paint);
+                                        canvas.drawLine(ptsPoli.pontosPolig.get(p).x, ptsPoli.pontosPolig.get(p).y, ptsPoli.pontosPolig.firstElement().x, ptsPoli.pontosPolig.firstElement().y, paint);
+                                        System.out.println("Primeiro Ponto da Reta" + "X"+ptsPoli.pontosPolig.get(p).x+ "Y" + ptsPoli.pontosPolig.get(p).y);
+                                        System.out.println("Ultimo Ponto da Reta" + "X"+ptsPoli.pontosPolig.get(p-2).x+ "Y" + ptsPoli.pontosPolig.get(p-2).y);
+                                        if(p>=3){
+                                            canvas.drawLine(ptsPoli.pontosPolig.get(p).x, ptsPoli.pontosPolig.get(p).y, ptsPoli.pontosPolig.firstElement().x, ptsPoli.pontosPolig.firstElement().y, paint);
+                                        }
+                                    }else{
+                                        canvas.drawLine(ptsPoli.pontosPolig.get(p).x, ptsPoli.pontosPolig.get(p).y, ptsPoli.pontosPolig.get(p - 1).x, ptsPoli.pontosPolig.get(p - 1).y, paint);
 
-                    if (i < lados_poly) {
-                        ponto5.x = poly.pontosPolig.get(i + 1).x;
-                        ponto5.y = poly.pontosPolig.get(i + 1).y;
+                                    }
 
-                        Reta retaPoli = new Reta(ponto4, ponto5);
-                        int var_lados = lados_poly - 1;
-
-                        if (i != var_lados) {
-                            canvas.drawLine(retaPoli.pinicial.x, retaPoli.pinicial.y, retaPoli.pfinal.x, retaPoli.pfinal.y, paint);
-                        } else {
-                            canvas.drawLine(poly.pontosPolig.firstElement().x, poly.pontosPolig.firstElement().y, retaPoli.pinicial.x, retaPoli.pinicial.y, paint);
-                        }
+                            }
 
                     }
                 }
-            }
         }
 
+        //Limpar tela
         if (deletar == 2){
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(Color.parseColor("#F5F1E0"));
             canvas.drawPaint(paint);
-            nrCliques = 0;
             ptsCirc.removeAllElements();
             ptsReta.removeAllElements();
             guardaRetas.removeAllElements();
+            ptsPoli.pontosPolig.removeAllElements();
         }
     }
-
-
 
 
     public void setfigure(int a) {
@@ -180,10 +242,6 @@ public class MyView extends View {
 
     public void Cor1_mudar(int text_cor) {
         this.cor = text_cor;
-    }
-
-    public void verLados (int lados){
-        this.lados_poly = lados;
     }
 
     public void Resetar(int delete){
