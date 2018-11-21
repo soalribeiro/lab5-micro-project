@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -84,7 +83,8 @@ public class MyView extends View {
                     ptReta.y = CursorY;
                     ptsReta.add(ptReta);
                     if (ptsReta.size() %2 == 0) {
-                    invalidate();}
+                        invalidate();
+                    }
                 }
 
                 if (figure == 3) {
@@ -92,14 +92,11 @@ public class MyView extends View {
                     ptPoli.x = CursorX;
                     ptPoli.y = CursorY;
                     ptsPoli.addpoint(ptPoli);
-                   // if (ptsPoli.pontosPolig.size() %2 == 0) {
-                    invalidate();//}
+                    invalidate();
                 }
 
             default:
                 return false;
-
-
         }
     }
 
@@ -107,7 +104,6 @@ public class MyView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-     //   clickEcra();
 
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.parseColor("#F5F1E0"));
