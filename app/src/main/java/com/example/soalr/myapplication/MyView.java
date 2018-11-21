@@ -20,8 +20,6 @@ public class MyView extends View {
     Vector<Reta> guardaRetas;
     Poligono ptsPoli;
 
-    int nrCliques;
-
     public MyView(Context context) {
         super(context);
         paint = new Paint();
@@ -105,9 +103,11 @@ public class MyView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        //pinta a tela
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.parseColor("#F5F1E0"));
         canvas.drawPaint(paint);
+        //pinta o objeto se não for selecionada nenhuma cor
         paint.setColor(Color.parseColor("#3F5866"));
 
         //cores
@@ -127,7 +127,7 @@ public class MyView extends View {
             if (ptsCirc.size() > 0) {
                 for (int a = 0; a < ptsCirc.size(); a++) {
                     Circulo raio = new Circulo(ptsCirc.get(a));
-                    raio.radius = 100;
+                    raio.radius = 80;
                     canvas.drawCircle(ptsCirc.get(a).x, ptsCirc.get(a).y, raio.radius, paint);
                 }
             }
@@ -152,21 +152,17 @@ public class MyView extends View {
         //figura 3 --> Polígono
         if (figure == 3) {
             if (ptsPoli.pontosPolig.size() > 0) {
-                    for (int p = 0; p < ptsPoli.pontosPolig.size(); p++) {
-                            if (p > 0) {
-                                if (p == ptsPoli.pontosPolig.size() - 1) {
-                                    canvas.drawLine(ptsPoli.pontosPolig.get(p - 1).x, ptsPoli.pontosPolig.get(p - 1).y, ptsPoli.pontosPolig.get(0).x, ptsPoli.pontosPolig.get(0).y, paint);
-                                } else {
-                                    canvas.drawLine(ptsPoli.pontosPolig.get(p).x, ptsPoli.pontosPolig.get(p).y, ptsPoli.pontosPolig.get(p - 1).x, ptsPoli.pontosPolig.get(p - 1).y, paint);
-                                }
-                            }
-
+                    for (int p = 1; p < ptsPoli.pontosPolig.size(); p++) {
+                        if (p == ptsPoli.pontosPolig.size() - 1) {
+                            canvas.drawLine(ptsPoli.pontosPolig.get(p).x, ptsPoli.pontosPolig.get(p).y, ptsPoli.pontosPolig.get(0).x, ptsPoli.pontosPolig.get(0).y, paint);
+                        }
+                        canvas.drawLine(ptsPoli.pontosPolig.get(p).x, ptsPoli.pontosPolig.get(p).y, ptsPoli.pontosPolig.get(p - 1).x, ptsPoli.pontosPolig.get(p - 1).y, paint);
                     }
                 }
         }
 
         //Limpar tela
-        if (deletar == 2){
+        if (deletar == 2) {
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(Color.parseColor("#F5F1E0"));
             canvas.drawPaint(paint);

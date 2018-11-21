@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Figuras
-    public void fig1(View vs) { //circ
+    public void fig1(View vs) { //círculo
         v.setfigure(1);
         v.Resetar(1);
         v.invalidate();
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         v.invalidate();
     }
 
-    public void fig3(View poli) { //poligono
+    public void fig3(View poli) { //polígono
         v.setfigure(3);
         v.Resetar(1);
         v.invalidate();
