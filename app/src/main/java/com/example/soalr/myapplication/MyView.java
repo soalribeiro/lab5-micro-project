@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,10 +16,12 @@ public class MyView extends View {
     int cor;
     int deletar;
     float CursorX, CursorY;
-    Vector<Ponto2D> ptsCirc;// = new Vector<Ponto2D>();
-    Vector<Ponto2D> ptsReta;// = new Vector<Ponto2D>();
-    Vector<Reta> guardaRetas;// = new Vector<Reta>();
-    Poligono ptsPoli;// = new Poligono();
+    Vector<Ponto2D> ptsCirc;
+    Vector<Ponto2D> ptsReta;
+    Vector<Reta> guardaRetas;
+    Poligono ptsPoli;
+
+    int nrCliques;
 
     public MyView(Context context) {
         super(context);
@@ -27,8 +30,8 @@ public class MyView extends View {
         cor = 0;
         ptsCirc = new Vector<Ponto2D>();
         ptsReta = new Vector<Ponto2D>();
-         guardaRetas = new Vector<Reta>();
-         ptsPoli = new Poligono();
+        guardaRetas = new Vector<Reta>();
+        ptsPoli = new Poligono();
 
     }
 
@@ -43,10 +46,6 @@ public class MyView extends View {
         guardaRetas = new Vector<Reta>();
         ptsPoli = new Poligono();
 
-//        Ponto2D centroCirc = new Ponto2D();
-//        centroCirc.x = CursorX;
-//        centroCirc.y = CursorY;
-//        cir = new Circulo(centroCirc);
     }
 
     public MyView(Context context, AttributeSet attrs, int defStyle) {
@@ -104,50 +103,6 @@ public class MyView extends View {
         }
     }
 
-   /* public void clickEcra() {
-        setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getActionMasked()) {
-                    case MotionEvent.ACTION_DOWN:
-
-                    case MotionEvent.ACTION_UP:
-
-                        CursorX = event.getX();
-                        CursorY = event.getY();
-
-                        if (figure == 1) {
-                            Ponto2D centroCirc = new Ponto2D();
-                            centroCirc.x = CursorX;
-                            centroCirc.y = CursorY;
-                            ptsCirc.add(centroCirc);
-                            invalidate();
-                        }
-
-                        if (figure == 2){
-                            Ponto2D ptReta = new Ponto2D();
-                            ptReta.x = CursorX;
-                            ptReta.y = CursorY;
-                            ptsReta.add(ptReta);
-
-                            invalidate();
-                        }
-
-                        if (figure == 3){
-                            Ponto2D ptPoli = new Ponto2D();
-                            ptPoli.x = CursorX;
-                            ptPoli.y = CursorY;
-                            ptsPoli.add(ptPoli);
-                            invalidate();
-                        }
-
-                    default:
-                        return false;
-                }
-            }
-        });*/
-    //}
-
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -203,20 +158,11 @@ public class MyView extends View {
             if (ptsPoli.pontosPolig.size() > 0) {
                     for (int p = 0; p < ptsPoli.pontosPolig.size(); p++) {
                             if (p > 0) {
-
-                                    if(p>=2){
-                                        canvas.drawLine(ptsPoli.pontosPolig.get(p).x, ptsPoli.pontosPolig.get(p).y, ptsPoli.pontosPolig.get(p - 1).x, ptsPoli.pontosPolig.get(p - 1).y, paint);
-                                        canvas.drawLine(ptsPoli.pontosPolig.get(p).x, ptsPoli.pontosPolig.get(p).y, ptsPoli.pontosPolig.firstElement().x, ptsPoli.pontosPolig.firstElement().y, paint);
-                                        System.out.println("Primeiro Ponto da Reta" + "X"+ptsPoli.pontosPolig.get(p).x+ "Y" + ptsPoli.pontosPolig.get(p).y);
-                                        System.out.println("Ultimo Ponto da Reta" + "X"+ptsPoli.pontosPolig.get(p-2).x+ "Y" + ptsPoli.pontosPolig.get(p-2).y);
-                                        if(p>=3){
-                                            canvas.drawLine(ptsPoli.pontosPolig.get(p).x, ptsPoli.pontosPolig.get(p).y, ptsPoli.pontosPolig.firstElement().x, ptsPoli.pontosPolig.firstElement().y, paint);
-                                        }
-                                    }else{
-                                        canvas.drawLine(ptsPoli.pontosPolig.get(p).x, ptsPoli.pontosPolig.get(p).y, ptsPoli.pontosPolig.get(p - 1).x, ptsPoli.pontosPolig.get(p - 1).y, paint);
-
-                                    }
-
+                                if (p == ptsPoli.pontosPolig.size() - 1) {
+                                    canvas.drawLine(ptsPoli.pontosPolig.get(p - 1).x, ptsPoli.pontosPolig.get(p - 1).y, ptsPoli.pontosPolig.get(0).x, ptsPoli.pontosPolig.get(0).y, paint);
+                                } else {
+                                    canvas.drawLine(ptsPoli.pontosPolig.get(p).x, ptsPoli.pontosPolig.get(p).y, ptsPoli.pontosPolig.get(p - 1).x, ptsPoli.pontosPolig.get(p - 1).y, paint);
+                                }
                             }
 
                     }

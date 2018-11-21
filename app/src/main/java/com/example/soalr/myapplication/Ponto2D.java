@@ -13,10 +13,12 @@ public class Ponto2D {
         y = b;
     }
 
+    //Calcula distância entre dois pontos
     public double dist(Ponto2D P1) {
         return Math.sqrt((x - P1.x) * (x - P1.x) + (y - P1.y) * (y - P1.y));
     }
 
+    //Calcula distância ao ponto 0,0
     public Double distCentro(){
         Ponto2D distanciaCentro = new Ponto2D(0,0);
         return this.dist(distanciaCentro);
