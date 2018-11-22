@@ -2,7 +2,7 @@ package com.example.soalr.myapplication;
 
 import java.util.Vector;
 
-public class Poligono extends Reta {
+public class Poligono {
 
     public Vector<Ponto2D> pontosPolig;
     private Double PerPoligono;

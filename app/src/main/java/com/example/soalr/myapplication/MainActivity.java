@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void mudaCor3(View vcor) {
         v.Cor1_mudar(3);
+
         v.invalidate();
     }
 

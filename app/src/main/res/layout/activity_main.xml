@@ -141,6 +141,7 @@
         android:background="@android:color/holo_red_dark"
         android:onClick="Reset"
         android:text="Apagar"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

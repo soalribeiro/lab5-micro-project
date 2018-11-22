@@ -29,7 +29,6 @@ public class MyView extends View {
         ptsReta = new Vector<Ponto2D>();
         guardaRetas = new Vector<Reta>();
         ptsPoli = new Poligono();
-
     }
 
     public MyView(Context context, AttributeSet attrs) {
@@ -42,7 +41,6 @@ public class MyView extends View {
         ptsReta = new Vector<Ponto2D>();
         guardaRetas = new Vector<Reta>();
         ptsPoli = new Poligono();
-
     }
 
     public MyView(Context context, AttributeSet attrs, int defStyle) {
@@ -110,7 +108,8 @@ public class MyView extends View {
         //pinta o objeto se não for selecionada nenhuma cor
         paint.setColor(Color.parseColor("#3F5866"));
 
-        //cores
+
+       //cores
         if (cor == 1) {
             paint.setColor(Color.parseColor("#393E46"));
         } else if (cor == 2){
@@ -152,10 +151,10 @@ public class MyView extends View {
         //figura 3 --> Polígono
         if (figure == 3) {
             if (ptsPoli.pontosPolig.size() > 0) {
-                    for (int p = 1; p < ptsPoli.pontosPolig.size(); p++) {
-                        if (p == ptsPoli.pontosPolig.size() - 1) {
-                            canvas.drawLine(ptsPoli.pontosPolig.get(p).x, ptsPoli.pontosPolig.get(p).y, ptsPoli.pontosPolig.get(0).x, ptsPoli.pontosPolig.get(0).y, paint);
-                        }
+                for (int p = 1; p < ptsPoli.pontosPolig.size(); p++) {
+                    if (p == ptsPoli.pontosPolig.size() - 1) {
+                        canvas.drawLine(ptsPoli.pontosPolig.get(p).x, ptsPoli.pontosPolig.get(p).y, ptsPoli.pontosPolig.get(0).x, ptsPoli.pontosPolig.get(0).y, paint);
+                    }
                         canvas.drawLine(ptsPoli.pontosPolig.get(p).x, ptsPoli.pontosPolig.get(p).y, ptsPoli.pontosPolig.get(p - 1).x, ptsPoli.pontosPolig.get(p - 1).y, paint);
                     }
                 }
